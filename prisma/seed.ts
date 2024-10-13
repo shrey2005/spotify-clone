@@ -15,17 +15,30 @@ const run = async () => {
                     song: {
                         create: artist.songs.map((song) => ({
                             name: song.name,
-                            duration : song.duration,
+                            duration: song.duration,
+                            url : song.url
                         }))
                     }
                 }
             })
         })
     )
+
+    const salt = bcrypt.genSaltSync();
+    const user = await prisma.user.upsert({
+        where: { email: 'user@gmail.com' },
+        update: {},
+        create: {
+            email: 'user@gmail.com',
+            password: bcrypt.hashSync('password', salt),
+        }
+    })
 }
 
 run()
-    .then()
+    .then((resp) => {
+        console.log('resp : ', resp)
+    })
     .catch(e => {
         console.error('Error for prisma : ', e)
         process.exit(1)
