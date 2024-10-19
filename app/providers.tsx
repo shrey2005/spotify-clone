@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import "reset-css";
 import PlayerLayout from "./components/PlayerLayout";
@@ -34,9 +35,14 @@ export const theme = extendTheme({
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  const pathName = usePathname();
+
+  const includeSidebar = pathName !== '/signin' && pathName !== '/signup';
   return (
     <ChakraProvider theme={theme}>
-      {children}
+      <PlayerLayout includeSidebar={includeSidebar}>
+        {children}
+      </PlayerLayout>
     </ChakraProvider>
   );
 }
